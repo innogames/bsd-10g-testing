@@ -1,27 +1,16 @@
 #!/bin/sh
 
-usage() {
-	echo "I expect the following parameters:"
-	echo " - IP of remote server to send traffic to"
-	echo " - IP of remote server to receive traffic from"
-	exit 1
-}
+. $(dirname "$0")/../lib/init.sh
 
-[ -z "$1" ] || [ -z "$2" ] && usage
-GW_TX=$1
-GW_RX=$2
+. $WDIR/config
 
 STEP=100
-SCRIPT=/tmp/ipgen.script
-
-WDIR=$(dirname "$0")
-UDIR=$WDIR/../utils
-LOGBASE=$(basename "$0")
 
 for QUEUES in `seq 1 6`; do
-	LOG="${LOGBASE}_$QUEUES.log"
-	$UDIR/set_num_queues.sh $GW_TX $QUEUES
-	$UDIR/gen_ipgen_script.sh $STEP 10000 > $SCRIPT
-	$UDIR/ipgen.sh $GW_TX $GW_RX 1000 $SCRIPT $LOG
+	TXT_LOG=$(logname ${QUEUES}_txt)
+	IPGEN_LOG=$(logname ${QUEUES}_ipgen)
+	$UDIR/set_num_queues.sh $GW_TX $QUEUES | tee -a $TXT_LOG
+	$UDIR/gen_ipgen_script.sh $STEP 10000 > $TMPSCRIPT
+	$UDIR/ipgen.sh $GW_TX $GW_RX 1000 $TMPSCRIPT $IPGEN_LOG
 done
 
