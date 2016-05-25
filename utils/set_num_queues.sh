@@ -21,7 +21,7 @@ if [ "$1" = "local" ]; then
 #	/sbin/reboot
 
 else
-	scp $UDIR/{pincpus.sh,set_num_queues.sh} root@$1:/tmp
+	scp $UDIR/pincpus.sh $UDIR/set_num_queues.sh root@$1:/tmp
 	ssh root@$1 /tmp/set_num_queues.sh local $2
 	echo "Waiting 30s for reboot"
 	sleep 30
