@@ -26,9 +26,13 @@ else
 	echo "Waiting 30s for reboot"
 	sleep 30
 	echo  "Waiting for $1 to come back"
-	while !	ssh -o ConnectTimeout=5 root@$1 /tmp/pincpus.sh 2>/dev/null; do
+	while !	ssh -o ConnectTimeout=5 root@$1 /bin/echo 2>/dev/null; do
 		sleep 5
 	done
-	echo
+	# Unfortunately IRQs are not visible until some traffic is sent through.
+	# So sent a bit of traffic and only then pin CPUs.
+	echo "Unfreezing IRQs"
+	$UDIR/ipgen.sh $GW_TX $GW_RX 1000 $UDIR/enable_irqs /dev/null > /dev/null
+	ssh root@$1 /tmp/pincpus.sh
 fi
 
