@@ -18,6 +18,7 @@ if [ "$1" = "local" ]; then
 	else 
 		echo "hw.ix.num_queues=$2" >> /boot/loader.conf
 	fi
+	echo "Rebooting " $(hostname)
 	/sbin/reboot
 else
 	echo "Configuring remote system to use $2 queues"
