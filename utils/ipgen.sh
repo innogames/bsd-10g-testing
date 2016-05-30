@@ -1,7 +1,7 @@
 #!/bin/sh
 
 base_ip="42.0.0.0"
-max_flow=1000
+max_flow=16777216
 
 usage() {
 	echo "I expect the following parameters:"
