@@ -16,7 +16,7 @@ if [ "$1" = "local" ]; then
 	if grep -qE '^hw.ix(gbe)?.num_queues=' /boot/loader.conf; then
 		sed -i '' -E 's/^(hw.ix(gbe)?.num_queues=).*/\1'"$2"'/' /boot/loader.conf
 	else 
-		if [ $(uname -K) -ge 1000000 ];
+		if [ $(uname -K) -ge 1000000 ]; then
 			echo "hw.ix.num_queues=$2" >> /boot/loader.conf
 		else
 			echo "hw.ixgbe.num_queues=$2" >> /boot/loader.conf
